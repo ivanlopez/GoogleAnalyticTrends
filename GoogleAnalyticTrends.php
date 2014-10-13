@@ -8,11 +8,9 @@ class GoogleAnalyticTrends {
 
 	protected $analytics;
 
-	protected $client_secret = 'notasecret';
+	protected $client_secret;
 
-	function __construct() {
-
-	}
+	function __construct() { }
 
 	public static function factory() {
 		static $instance = false;
@@ -45,6 +43,7 @@ class GoogleAnalyticTrends {
 	}
 
 	protected function bootsrapp() {
+		self::factory()->client_secret = apply_filters( 'tag_client_secret', 'notasecret' );
 		self::factory()->client = new \Google_Client();
 		$client = self::factory()->client;
 		$client->setApplicationName( 'GoogleAnalyticTrends' );
@@ -78,6 +77,22 @@ class GoogleAnalyticTrends {
 		return self::factory()->parse_data( $data, $limit );
 	}
 
+	public function get_post_by_event( $action, $limit = 5 ){
+		$params    = array(
+			'dimensions'  => 'ga:pagePath,ga:eventAction',
+			'metrics'     => 'ga:totalEvents',
+			'filters'     => 'ga:eventAction==' . $action,
+			'sort'        => '-ga:totalEvents',
+			'max-results' => apply_filters( 'gat_max_results', 50 )
+		);
+
+		$days_back = apply_filters( 'gat_past_days', 7 );
+
+		$data = self::factory()->analytics->data_ga->get( GAT_ACCOUNT, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
+		print_r($data);
+		return self::factory()->parse_data( $data, $limit );
+	}
+
 	protected function parse_data( $data, $limit = 5 ) {
 		$posts    = array();
 		$post_ref = array();
@@ -103,6 +118,4 @@ class GoogleAnalyticTrends {
 
 		return $posts;
 	}
-
-
 }
