@@ -1,0 +1,23 @@
+{
+	"name"             : "10up/googleanalytictrends",
+	"description"      : "Popular content based on Google Analytics.",
+	"license"          : "MIT",
+	"authors"          : [
+		{
+			"name" : "Ivan Lopez",
+			"email": "ivan@10up.com"
+		}
+	],
+	"version"          : "1.0.0",
+	"type"             : "wordpress-library",
+	"minimum-stability": "stable",
+	"require"          : {
+		"google/apiclient": "dev-master"
+	},
+	"require-dev"      : {
+		"10up/wp_mock"        : "dev-master",
+		"antecedent/patchwork": "1.2.*",
+		"phpunit/phpunit"     : "*@stable",
+		"brianium/paratest"   : "dev-master"
+	}
+}
