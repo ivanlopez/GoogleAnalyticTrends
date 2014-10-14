@@ -64,7 +64,9 @@ class GoogleAnalyticTrends {
 		}
 
 		//Load Google library
-		require_once 'vendor/google/apiclient/autoload.php';
+		set_include_path(  '/google/apiclient/src/' );
+		require_once 'Google/Client.php';
+		require_once 'Google/Service/Analytics.php';
 		GoogleAnalyticTrends::factory()->bootsrapp_api();
 	}
 
