@@ -34,7 +34,7 @@ class GoogleAnalyticTrends {
 			trigger_error( "GAT_KEY_PATH must be set to use this library", E_USER_ERROR );
 		}
 
-		if ( ! defined( 'GAT_ACCOUNT' ) ) {
+		if ( ! defined( 'GAT_VIEW_ID' ) ) {
 			trigger_error( "GAT_KEY_PATH must be set to use this library", E_USER_ERROR );
 		}
 
@@ -73,7 +73,7 @@ class GoogleAnalyticTrends {
 
 		$days_back = apply_filters( 'gat_past_days', 7 );
 
-		$data = self::factory()->analytics->data_ga->get( GAT_ACCOUNT, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
+		$data = self::factory()->analytics->data_ga->get( GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
 		return self::factory()->parse_data( $data, $limit );
 	}
 
@@ -88,7 +88,7 @@ class GoogleAnalyticTrends {
 
 		$days_back = apply_filters( 'gat_past_days', 7 );
 
-		$data = self::factory()->analytics->data_ga->get( GAT_ACCOUNT, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
+		$data = self::factory()->analytics->data_ga->get( GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
 		print_r($data);
 		return self::factory()->parse_data( $data, $limit );
 	}
