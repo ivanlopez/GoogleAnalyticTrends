@@ -10,7 +10,7 @@ Additionally, you must define the following contestants:
 
 * `GAT_CLIENT_ID` Client ID provided by Google API
 * `GAT_SERVICE_ACCOUNT_NAME` Service account name provided by Google API
-* `GAT_CLIENT_ID` Path to the privatekey.p12 provided by Google API
+* `GAT_KEY_PATH` Path to the privatekey.p12 provided by Google API
 * `GAT_VIEW_ID` View ID from from view setting section of Google Analytics dashboard
 
 ## Setting up Google API
