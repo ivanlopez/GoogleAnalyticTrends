@@ -22,5 +22,6 @@ Additionally, you must define the following contestants:
 6. From the Create Client ID modal select Service account
 7. You will be prompted to download a .p12 file that you need to add anywhere in your WordPress install
 8. On the final screen you will see the Client ID and Email that is needed for setting up this module
+9. Take the Email that was generated and add it as a user to the Google Analytics Profile you will be accessing. See how to add a users here https://support.google.com/analytics/answer/1009702?hl=en
 
 

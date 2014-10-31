@@ -82,21 +82,22 @@ class GoogleAnalyticTrends {
 		 *
 		 * @param string .
 		 */
-		$client->setApplicationName( apply_filters( 'tag_client_secret', 'GoogleAnalyticTrends' ) );
+		$client->setApplicationName( apply_filters( 'gat_app_name', 'GoogleAnalyticTrends' ) );
 
 		/**
 		 * Filter the API redirect URL.
 		 *
 		 * @param string .
 		 */
-		$client->setRedirectUri( apply_filters( 'gat_redirect', get_site_url( get_current_blog_id() ) ) . '/oauth2callback' );
+		$client->setRedirectUri( apply_filters( 'gat_redirect', get_site_url( get_current_blog_id() )  . '/oauth2callback' ) );
+
 
 		/**
 		 * Filter the client secret.
 		 *
 		 * @param string .
 		 */
-		$client->setClientSecret( apply_filters( 'tag_client_secret', 'notasecret' ) );
+		$client->setClientSecret( apply_filters( 'gat_client_secret', 'notasecret' ) );
 
 		$client->setAssertionCredentials(
 			new \Google_Auth_AssertionCredentials(
@@ -118,7 +119,7 @@ class GoogleAnalyticTrends {
 	 *
 	 * @return array
 	 */
-	public function get_popular_post( $limit = 5 ) {
+	public function get_popular_post( $limit = 5, $cache = true ) {
 
 		/**
 		 * Filter the number of results returned from the Google API.
@@ -143,6 +144,8 @@ class GoogleAnalyticTrends {
 
 		$data = self::factory()->analytics->data_ga->get( 'ga:' . GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
 
+		print_r($data);
+
 		return self::factory()->parse_data( $data, $limit );
 	}
 
@@ -154,7 +157,7 @@ class GoogleAnalyticTrends {
 	 *
 	 * @return array
 	 */
-	public function get_post_by_event( $action, $limit = 5 ) {
+	public function get_post_by_event( $action, $limit = 5, $cache = true ) {
 
 		/**
 		 * Filter the number of results returned from the Google API.
@@ -179,7 +182,6 @@ class GoogleAnalyticTrends {
 		$days_back = apply_filters( 'gat_event_past_days', 7 );
 
 		$data = self::factory()->analytics->data_ga->get( GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
-		print_r( $data );
 
 		return self::factory()->parse_data( $data, $limit );
 	}
@@ -205,7 +207,7 @@ class GoogleAnalyticTrends {
 						$post = get_post( $post_id );
 						if ( ! in_array( $post->post_title, $post_ref ) ) {
 							$post_ref[] = $post->post_title;
-							$posts[]    = $post;
+							$posts[]    = $post->ID;
 						}
 					}
 				}
