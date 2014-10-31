@@ -64,9 +64,8 @@ class GoogleAnalyticTrends {
 		}
 
 		//Load Google library
-		set_include_path(  '/google/apiclient/src/' );
-		require_once 'Google/Client.php';
-		require_once 'Google/Service/Analytics.php';
+		require_once 'vendor/google/apiclient/src/Google/Client.php';
+		require_once 'vendor/google/apiclient/src/Google/Service/Analytics.php';
 		GoogleAnalyticTrends::factory()->bootsrapp_api();
 	}
 
@@ -142,7 +141,7 @@ class GoogleAnalyticTrends {
 		 */
 		$days_back = apply_filters( 'gat_popular_past_days', 7 );
 
-		$data = self::factory()->analytics->data_ga->get( GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
+		$data = self::factory()->analytics->data_ga->get( 'ga:' . GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
 
 		return self::factory()->parse_data( $data, $limit );
 	}
