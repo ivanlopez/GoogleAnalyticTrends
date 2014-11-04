@@ -89,7 +89,7 @@ class GoogleAnalyticTrends {
 		 *
 		 * @param string .
 		 */
-		$client->setRedirectUri( apply_filters( 'gat_redirect', get_site_url( get_current_blog_id() )  . '/oauth2callback' ) );
+		$client->setRedirectUri( apply_filters( 'gat_redirect', get_site_url( get_current_blog_id() ) . '/oauth2callback' ) );
 
 
 		/**
@@ -141,10 +141,8 @@ class GoogleAnalyticTrends {
 		 * @param int .
 		 */
 		$days_back = apply_filters( 'gat_popular_past_days', 7 );
-
-		$data = self::factory()->analytics->data_ga->get( 'ga:' . GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
-
-		print_r($data);
+		$view_id   = apply_filters( 'gat_view_id', GAT_VIEW_ID );
+		$data      = self::factory()->analytics->data_ga->get( 'ga:' . $view_id, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
 
 		return self::factory()->parse_data( $data, $limit );
 	}
@@ -180,8 +178,8 @@ class GoogleAnalyticTrends {
 		 * @param int .
 		 */
 		$days_back = apply_filters( 'gat_event_past_days', 7 );
-
-		$data = self::factory()->analytics->data_ga->get( GAT_VIEW_ID, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
+		$view_id   = apply_filters( 'gat_view_id', GAT_VIEW_ID );
+		$data      = self::factory()->analytics->data_ga->get( 'ga:' . $view_id, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
 
 		return self::factory()->parse_data( $data, $limit );
 	}
