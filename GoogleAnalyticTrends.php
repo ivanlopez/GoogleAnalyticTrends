@@ -60,7 +60,7 @@ class GoogleAnalyticTrends {
 		}
 
 		if ( ! defined( 'GAT_VIEW_ID' ) ) {
-			trigger_error( "GAT_KEY_PATH must be set to use this library", E_USER_ERROR );
+			trigger_error( "GAT_VIEW_ID must be set to use this library", E_USER_ERROR );
 		}
 
 		//Load Google library
