@@ -135,16 +135,20 @@ class GoogleAnalyticTrends {
 			'max-results' => $max_results
 		);
 
-		/**
-		 * Filter how many days back to get results from the Google API.
-		 *
-		 * @param int .
-		 */
-		$days_back = apply_filters( 'gat_popular_past_days', 7 );
-		$view_id   = apply_filters( 'gat_view_id', GAT_VIEW_ID );
-		$data      = self::factory()->analytics->data_ga->get( 'ga:' . $view_id, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
+		if ( ! $cache || false === ( $popular_post = get_transient( 'gat_popular_post' ) ) ) {
+			/**
+			 * Filter how many days back to get results from the Google API.
+			 *
+			 * @param int .
+			 */
+			$days_back = apply_filters( 'gat_popular_past_days', 7 );
+			$view_id   = apply_filters( 'gat_view_id', GAT_VIEW_ID );
+			$data      = self::factory()->analytics->data_ga->get( 'ga:' . $view_id, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:pageviews', $params );
+			$popular_post = self::factory()->parse_data( $data, $limit );
+			set_transient( 'gat_popular_post', $popular_post, HOUR_IN_SECONDS );
+		}
 
-		return self::factory()->parse_data( $data, $limit );
+		return $popular_post;
 	}
 
 	/**
@@ -169,19 +173,24 @@ class GoogleAnalyticTrends {
 			'metrics'     => 'ga:totalEvents',
 			'filters'     => 'ga:eventAction==' . $action,
 			'sort'        => '-ga:totalEvents',
-			'max-results' => apply_filters( 'gat_max_results', 50 )
+			'max-results' => $max_results
 		);
 
-		/**
-		 * Filter how many days back to get results from the Google API.
-		 *
-		 * @param int .
-		 */
-		$days_back = apply_filters( 'gat_event_past_days', 7 );
-		$view_id   = apply_filters( 'gat_view_id', GAT_VIEW_ID );
-		$data      = self::factory()->analytics->data_ga->get( 'ga:' . $view_id, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
+		if ( ! $cache || false === ( $event_post = get_transient( 'gat_' . $action . 'event_post' ) ) ) {
+			/**
+			 * Filter how many days back to get results from the Google API.
+			 *
+			 * @param int .
+			 */
+			$days_back = apply_filters( 'gat_event_past_days', 7 );
+			$view_id   = apply_filters( 'gat_view_id', GAT_VIEW_ID );
+			$data      = self::factory()->analytics->data_ga->get( 'ga:' . $view_id, date( 'Y-m-d', strtotime( '-' . $days_back . ' days' ) ), date( 'Y-m-d', strtotime( 'now' ) ), 'ga:totalEvents', $params );
 
-		return self::factory()->parse_data( $data, $limit );
+			$event_post = self::factory()->parse_data( $data, $limit );
+			set_transient( 'gat_' . $action . 'event_post', $event_post, HOUR_IN_SECONDS );
+		}
+
+		return $event_post;
 	}
 
 	/**
